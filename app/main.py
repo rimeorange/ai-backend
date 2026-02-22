@@ -1,18 +1,19 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
+
+from app.api.routes.health import router as health_router
+
 import logging
 
-app = FastAPI()
+app = FastAPI(title="AI Backend Starter")
+
+app.include_router(health_router)
 
 class ChatRequest(BaseModel):
     message: str
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-@app.get("/health")
-def health():
-    return {"status": "ok"}
 
 @app.post("/chat")
 def chat(req: ChatRequest):
