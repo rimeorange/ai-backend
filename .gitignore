@@ -1,0 +1,15 @@
+# venv
+.venv/
+
+# python
+__pycache__/
+*.pyc
+
+# mac
+.DS_Store
+
+# ide
+.idea/
+
+# env
+.env
