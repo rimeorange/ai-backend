@@ -19,3 +19,18 @@ source .venv/bin/activate
 pip install -r requirements.txt  # (없으면 아래 pip install 참고)
 uvicorn app.main:app --reload
 ```
+
+## LLM Integration (Week2)
+- LLM_MODE 환경 변수로 echo / LLM 모드 전환
+- OpenAIClient에서 외부 API 호출 전담
+- 인증/레이트리밋/네트워크 오류를 도메인 예외로 변환
+- ChatService에서 예외를 사용자 친화 메시지로 처리
+- Timeout(10s) + 1회 재시도 적용
+- request_id 및 duration(ms) 로깅
+
+
+### Architecture Summary
+- Router는 요청/응답 처리만 담당
+- Service는 비지니스 로직 담당
+- Client는 외부 API 호출 담당
+- Core는 설정 및 로깅 담당
