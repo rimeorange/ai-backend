@@ -1,4 +1,5 @@
 import logging
+import time
 from app.core.config import settings
 from app.clients.openai_client import OpenAIClient, LLMAuthError, LLMRateLimitError, LLMTemporaryError, LLMError
 
@@ -27,8 +28,13 @@ class ChatService:
         if self.llm is None:
             self.llm = OpenAIClient()
 
+        start = time.time()
+
         try:
-            return self.llm.chat(msg)
+            result =  self.llm.chat(msg)
+            duration = round((time.time() - start) * 1000, 2) # ms 단위
+            logger.info("LLM success | duration_ms=%s", duration)
+            return result
 
         except LLMAuthError as e:
             logger.warning("LLM auth error: %s", e)
