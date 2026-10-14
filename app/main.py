@@ -1,36 +1,11 @@
 from fastapi import FastAPI
-from pydantic import BaseModel
-import requests
+from app.routers.chat import router
 
 app = FastAPI()
 
-class ChatRequest(BaseModel):
-    prompt: str
+app.include_router(router)
 
 @app.get("/hello")
 def hello():
     return {"message": "hello"}
 
-@app.post("/chat")
-def chat(request: ChatRequest):
-    payload = {
-        "model" : "qwen2.5:3b",
-        "messages": [
-            {
-                "role": "user",
-                "content": request.prompt
-            }
-        ],
-        "stream": False
-    }
-    
-    response = requests.post(
-        "http://localhost:11434/api/chat",
-        json=payload
-    )
-  
-    data = response.json()
-    
-    return {
-        "message": data["message"]["content"]
-    }
