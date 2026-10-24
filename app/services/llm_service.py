@@ -2,15 +2,10 @@ import requests
 
 class LLMServices:
     
-    def ask(self, prompt: str) -> str:
+    def ask(self, messages: list[dict[str, str]]) -> str:
         payload = {
             "model": "qwen2.5:3b",
-            "messages": [
-                {
-                    "role": "user",
-                    "content": prompt
-                }
-            ],
+            "messages": messages,
             "stream": False
         }
         

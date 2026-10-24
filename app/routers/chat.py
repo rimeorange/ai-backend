@@ -10,7 +10,7 @@ chat_service = ChatServices(llm_service)
 
 @router.post("/chat")
 def chat(request: ChatRequest):
-    answer = chat_service.chat(request.prompt)
+    answer = chat_service.chat(request.user_id, request.prompt)
     
     return {
         "message": answer
