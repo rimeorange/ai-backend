@@ -1,5 +1,6 @@
 from app.services.llm_service import LLMServices
 from app.repositories.memory_repository import MemoryRepository
+from collections.abc import Iterator
 
 class ChatServices:
     
@@ -27,3 +28,26 @@ class ChatServices:
         self.memory_repository.save(user_id, messages)
         
         return answer
+    
+    
+    def chat_stream(self, user_id:str, prompt:str) -> str:
+        messages = self.memory_repository.find_by_user_id(user_id).copy()
+        
+        messages.append({
+            "role": "user",
+            "content": prompt
+        })
+        
+        answer = ""
+        
+        for chunk in self.llm_service.ask_stream(messages):
+            answer += chunk
+            yield chunk
+            
+        
+        messages.append({
+            "role": "assistant",
+            "content": answer
+        })    
+        
+        self.memory_repository.save(user_id, messages)
